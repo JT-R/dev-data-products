@@ -1,0 +1,119 @@
+---
+title: "Trees_model_app_description"
+author: "Jakub Tomaszewski"
+date: "Saturday, July 26, 2014"
+output: html_document
+---
+
+Introduction
+----------------------------
+This document contains technical information on the presented Shiny app.
+
+*Trees_model_app* uses data from 'trees' dataset, which consists of 31 observations and 3 attributes describing size of the given tree: Girth, Height and Volume. 
+
+User of this app can experiment with the linear models predicting volume of the given tree with one explanatory variable: Girth or Height.
+
+Features
+----------------------------
+
+- Choice of the predictor used in the model.
+- Control of the confidence level for confidence intervals on the plot.
+- Number of observations in the data can be changed (i.e. to check how the width of confidence intervals depends on the size of data).
+- Adjustment of the plot with checkboxes (show/hide options):
+    1. Grid;
+    2. Line fitted by the model;
+    3. Curves corresponding to the borders of confidence intervals for the fitted values.
+
+Code
+----------------------------
+
+Here is the code for handling user interface of this app:
+
+```{r, results='hide'}
+library(shiny)
+
+shinyUI(
+  navbarPage("Predictive model for the tree volume (based on 'trees' dataset)",
+             tabPanel("Linear model and graph",
+                      
+                      sidebarLayout(
+                        sidebarPanel(
+                          sliderInput("n_obs",
+                                      "Number of observations used for building the linear model:",
+                                      min = 1,
+                                      max = nrow(trees),
+                                      value = nrow(trees),
+                                      step = 1),
+                          checkboxInput("grid","Show grid on the plot",TRUE),
+                          selectInput("predictor1", "Predictor (visible on X-axis):",choices=c("Girth","Height")),
+                          checkboxInput("trend","Show linear regression trend line based on the predictor chosen above"),
+                          sliderInput("conf_level",
+                                      "Choose the confidence level [%]:",
+                                      min = 0,
+                                      max = 99,
+                                      value = 95,
+                                      step = 1),
+                          checkboxInput("conf","Show the confidence interval for the trend line")
+                        ),
+                        
+                        mainPanel(
+                          plotOutput("treePlot")
+                        )
+                      )
+             ),
+             tabPanel("Documentation",
+                      mainPanel(
+                        includeMarkdown("trees_model_app_description.md")
+                      )
+             )
+            )
+)
+```
+
+Code responsible for server-side calculations is listed below:
+
+```{r, results='hide'}
+library(shiny)
+data(trees)
+n <- nrow(trees)
+
+Girth <- trees$Girth
+Height <- trees$Height
+Volume <- trees$Volume
+
+shinyServer(function(input, output) {
+
+  output$treePlot <- renderPlot({
+
+   n_obs <- input$n_obs
+   observations_indices <- 1:n_obs
+    
+    plot(x=trees[observations_indices,input$predictor1], y=trees[observations_indices,"Volume"],
+         col='green',
+         pch=19,
+         cex=1.5,
+         xlab=input$predictor1,
+         ylab="Volume",
+         main=paste0("Scatterplot of ",input$predictor1," and Volume"))
+    if(input$grid==TRUE) grid()
+    if(input$trend==TRUE){
+      model <- lm(paste0("Volume ~ ",input$predictor1),data=trees)
+      abline(model)
+    }
+    if(input$conf==TRUE){
+      conf_x <- data.frame(seq(min(trees[,input$predictor1]), max(trees[,input$predictor1]), 0.1))
+      colnames(conf_x) <- input$predictor1
+      model <- lm(paste0("Volume ~ ",input$predictor1),data=trees)
+      pred <- predict(model,
+                      newdata=conf_x,
+                      interval="confidence",
+                      level=input$conf_level/100)
+      lines(conf_x[,1], pred[,2], lty=2)
+      lines(conf_x[,1], pred[,3], lty=2) 
+    }
+  })
+})
+
+```
+
+I hope you enjoy this simple app.

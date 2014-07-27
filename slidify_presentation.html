@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Predictive model for the volume of a tree</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Predictive model for the volume of a tree">
+  <meta name="author" content="Jakub Tomaszewski">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Predictive model for the volume of a tree</h1>
+    <h2>based on the 'trees' dataset</h2>
+    <p>Jakub Tomaszewski<br/>Developing Data Products PA project</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h4>Introduction: &#39;trees&#39; dataset</h4>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Consists of 31 observations and 3 attributes describing size of the given tree.</li>
+</ul>
+
+<pre><code class="r">head(trees,2)
+</code></pre>
+
+<pre><code>##   Girth Height Volume
+## 1   8.3     70   10.3
+## 2   8.6     65   10.3
+</code></pre>
+
+<pre><code class="r">rbind(Mean=apply(trees,2,mean),Min=apply(trees,2,min),Max=apply(trees,2,max))
+</code></pre>
+
+<pre><code>##      Girth Height Volume
+## Mean 13.25     76  30.17
+## Min   8.30     63  10.20
+## Max  20.60     87  77.00
+</code></pre>
+
+<ul>
+<li>It could be interesting to find the model explaining the functional relationships between these variables.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>How does it look like</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="C:\Users\Kuba1\Desktop\Dropbox\Coursera_edX\Developing_Data_Products\shiny_app\example.png" height="359px" width="1024px" /></p>
+
+<p>On the image above we can see an exemplary appearance of the app.</p>
+
+<p>Settings selected in the checkboxes and sliders in the left panel determine how the graph on the right looks like.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Features</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><b>Trees_model_app</b> has interactive user interface, which allows the user to perform the following actions:</p>
+
+<ul>
+<li>Choice of the predictor used in the model.</li>
+<li>Control of the confidence level for confidence intervals on the plot.</li>
+<li>Number of observations in the data can be changed (i.e. to check how the width of confidence intervals depends on size of the data).</li>
+<li>Adjustment of the plot with checkboxes (show/hide options):
+
+<ol>
+<li>Grid;</li>
+<li>Line fitted by the model;</li>
+<li>Curves corresponding to the borders of confidence intervals for the fitted values.</li>
+</ol></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Links and sources</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>Shiny</h3>
+
+<p><b>Trees_model_app</b> was implemented in R using Shiny web application framework: <a href="http://shiny.rstudio.com">http://shiny.rstudio.com</a>. </p>
+
+<h3>Github repository with source code of the app:</h3>
+
+<p><b><a href="https://github.com/JT-R/dev-data-products">https://github.com/JT-R/dev-data-products</a></b></p>
+
+<ul>
+<li><i>server.R</i> is responsible for server-side calculations (i.e. model construction);</li>
+<li><i>ui.R</i> handles the user interface of this app.</li>
+</ul>
+
+<h3>Source code of this presentation:</h3>
+
+<p><b><a href="https://github.com/JT-R/dev-data-products/slidify_presentation.Rmd">https://github.com/JT-R/dev-data-products/slidify_presentation.Rmd</a></b></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Introduction: &#39;trees&#39; dataset'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='How does it look like'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Features'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Links and sources'>
+         4
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
